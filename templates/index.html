@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShoeSync — Parallel Sneaker Intelligence</title>
+    <meta name="description" content="Real-time parallel web scraping engine for Pakistan's top footwear brands.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div id="cursor-glow"></div>
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="ambient-layer">
+        <div class="neon-blob blob-magenta"></div>
+        <div class="neon-blob blob-purple"></div>
+        <div class="neon-blob blob-orange"></div>
+        <div class="neon-blob blob-wine"></div>
+    </div>
+
+    <div class="noise-overlay"></div>
+    <div class="scan-line"></div>
+
+    <!-- ═══════ HERO ═══════ -->
+    <section class="hero" id="hero">
+
+        <!-- Floating sneakers — NO containers, raw images in the scene -->
+        <!-- Shoe 1: Upper right, large, in front of blobs but behind search -->
+        <img src="/static/sneaker1.png" alt="" class="scene-shoe shoe-right" data-speed="0.04" aria-hidden="true">
+
+        <!-- Shoe 2: Left side, partially off-screen, behind text -->
+        <img src="/static/sneaker2.png" alt="" class="scene-shoe shoe-left" data-speed="-0.03" aria-hidden="true">
+
+        <!-- Shoe 3: Behind hero text, subtle, blurred for depth -->
+        <img src="/static/sneaker1.png" alt="" class="scene-shoe shoe-back" data-speed="0.02" aria-hidden="true">
+
+        <div class="hero-inner">
+            <div class="hero-badge">
+                <span class="badge-pulse"></span>
+                <span class="badge-text">DISTRIBUTED SCRAPING ENGINE</span>
+            </div>
+
+            <h1 class="hero-title">
+                <span class="title-top">Shoe</span><span class="title-accent">Sync</span>
+            </h1>
+            <p class="hero-sub">PARALLEL INTELLIGENCE</p>
+
+            <p class="hero-desc">
+                Concurrent thread execution across
+                <strong class="hl-bata">Bata</strong>,
+                <strong class="hl-ndure">Ndure</strong> &amp;
+                <strong class="hl-servis">Servis</strong>
+                — real-time price aggregation.
+            </p>
+
+            <div class="search-wrap">
+                <div class="search-border-glow"></div>
+                <div class="search-scan-line"></div>
+                <div class="search-bar">
+                    <div class="search-icon"><i class="fas fa-terminal"></i></div>
+                    <input type="text" id="query" placeholder="initialize scraper query..." autocomplete="off" onkeyup="if(event.key==='Enter')initSearch()">
+                    <button id="search-btn" onclick="initSearch()">
+                        <span class="btn-label">EXECUTE</span>
+                        <span class="btn-icon"><i class="fas fa-bolt"></i></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════ NETWORK ═══════ -->
+    <section class="network-section" id="network-section">
+        <div class="container">
+            <div class="section-tag"><span class="tag-line"></span>PARALLEL EXECUTION MAP<span class="tag-line"></span></div>
+            <div class="network-wrap">
+                <svg class="network-svg" id="network-svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
+                    <line class="net-line" id="line-bata" x1="400" y1="150" x2="130" y2="150"/>
+                    <line class="net-line" id="line-ndure" x1="400" y1="150" x2="400" y2="40"/>
+                    <line class="net-line" id="line-servis" x1="400" y1="150" x2="670" y2="150"/>
+                    <circle class="data-dot" id="pulse-bata" r="5" cx="400" cy="150"/>
+                    <circle class="data-dot" id="pulse-ndure" r="5" cx="400" cy="150"/>
+                    <circle class="data-dot" id="pulse-servis" r="5" cx="400" cy="150"/>
+                </svg>
+                <div class="node node-center" id="node-center"><div class="node-ring"></div><div class="node-core"><i class="fas fa-microchip"></i></div><span class="node-label">ThreadPool<br>Executor</span></div>
+                <div class="node node-bata" id="node-bata"><div class="node-ring"></div><div class="node-core">B</div><span class="node-label">Bata</span><span class="node-status">idle</span></div>
+                <div class="node node-ndure" id="node-ndure"><div class="node-ring"></div><div class="node-core">N</div><span class="node-label">Ndure</span><span class="node-status">idle</span></div>
+                <div class="node node-servis" id="node-servis"><div class="node-ring"></div><div class="node-core">S</div><span class="node-label">Servis</span><span class="node-status">idle</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════ STATS ═══════ -->
+    <section class="stats-section hidden" id="stats-section">
+        <div class="container">
+            <div class="stats-row">
+                <div class="stat"><div class="stat-val" id="stat-products">0</div><div class="stat-lbl">Products</div></div>
+                <div class="stat-divider"></div>
+                <div class="stat"><div class="stat-val" id="stat-threads">3</div><div class="stat-lbl">Threads</div></div>
+                <div class="stat-divider"></div>
+                <div class="stat"><div class="stat-val" id="stat-requests">3</div><div class="stat-lbl">Parallel Req</div></div>
+                <div class="stat-divider"></div>
+                <div class="stat"><div class="stat-val" id="stat-cheapest">—</div><div class="stat-lbl">Cheapest</div></div>
+                <div class="stat-divider"></div>
+                <div class="stat"><div class="stat-val" id="stat-time">—</div><div class="stat-lbl">Exec Time</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════ RESULTS ═══════ -->
+    <section class="results-section" id="results-section">
+        <div class="container">
+            <div id="results-header" class="hidden">
+                <div class="section-tag"><span class="tag-line"></span>SCRAPED RESULTS<span class="tag-line"></span></div>
+            </div>
+            <div class="results-grid" id="results"></div>
+        </div>
+    </section>
+
+    <!-- ═══════ FOOTER ═══════ -->
+    <footer class="site-footer">
+        <div class="footer-line"></div>
+        <p class="footer-brand">Shoe<span class="title-accent">Sync</span></p>
+        <p class="footer-sub">Powered by Parallel Computing &amp; Real-Time Web Scraping</p>
+        <div class="footer-tech"><span>Python</span><span>·</span><span>ThreadPoolExecutor</span><span>·</span><span>Flask</span><span>·</span><span>Concurrent Futures</span></div>
+    </footer>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
