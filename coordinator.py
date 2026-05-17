@@ -27,7 +27,7 @@ def search_all_sites(query):
     unique = []
 
     for item in all_results:
-        key = (item["name"], item["site"])
+        key = item["url"]
         if key not in seen:
             seen.add(key)
             unique.append(item)
