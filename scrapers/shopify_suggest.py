@@ -23,7 +23,7 @@ def fetch_products(origin: str, query: str, site_label: str, max_items: int = 5)
     params = {
         "q": q,
         "resources[type]": "product",
-        "resources[limit]": "10",
+        "resources[limit]": "20",
     }
 
     try:
