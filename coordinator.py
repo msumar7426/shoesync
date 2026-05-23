@@ -17,7 +17,7 @@ def search_all_sites(query):
 
         for future in futures:
             try:
-                result = future.result(timeout=10)
+                result = future.result(timeout=20)
                 all_results.extend(result or [])
             except Exception as e:
                 print("Worker Error:", e)
@@ -27,7 +27,7 @@ def search_all_sites(query):
     unique = []
 
     for item in all_results:
-        key = item["url"]
+        key = item["url"]  # URL is unique per product; name is not (e.g. Servis "Women Heels")
         if key not in seen:
             seen.add(key)
             unique.append(item)
